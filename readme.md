@@ -1,215 +1,217 @@
-🤖 AI Ticket Assistant
+# AI-Ticket-Assistant
 
-An AI-powered ticket management system that automatically categorizes, prioritizes, and assigns support tickets to the most appropriate moderators using Google Gemini AI.
+Welcome to the AI-Powered Ticket Management System!
+This project is a web application that uses AI to automatically categorize, prioritize, and assign support tickets to the most appropriate moderators.
 
-This system reduces manual effort in ticket routing and improves response efficiency through AI-driven automation and skill-based moderator assignment.
+# AI-Powered Ticket Management System
 
-🚀 Features
-🧠 AI-Powered Ticket Processing
+A smart ticket management system that uses AI to automatically categorize, prioritize, and assign support tickets to the most appropriate moderators.
 
-Automatic ticket categorization
+## 🚀 Features
 
-Priority detection using AI
+- **AI-Powered Ticket Processing**
 
-AI-generated moderator notes
+  - Automatic ticket categorization
+  - Smart priority assignment
+  - Skill-based moderator matching
+  - AI-generated helpful notes for moderators
 
-Identification of required technical skills
+- **Smart Moderator Assignment**
 
-👨‍💻 Smart Moderator Assignment
+  - Automatic matching of tickets to moderators based on skills
+  - Fallback to admin assignment if no matching moderator found
+  - Skill-based routing system
 
-Automatic skill-based moderator matching
+- **User Management**
 
-Regex-based skill detection
+  - Role-based access control (User, Moderator, Admin)
+  - Skill management for moderators
+  - User authentication with JWT
 
-Admin fallback assignment if no matching moderator is found
+- **Background Processing**
+  - Event-driven architecture using Inngest
+  - Automated email notifications
+  - Asynchronous ticket processing
 
-👥 User Management
+## 🛠️ Tech Stack
 
-Role-based access control
+- **Backend**: Node.js with Express
+- **Database**: MongoDB
+- **Authentication**: JWT
+- **Background Jobs**: Inngest
+- **AI Integration**: Google Gemini API
+- **Email**: Nodemailer with Mailtrap
+- **Development**: Nodemon for hot reloading
 
-User
+## 📋 Prerequisites
 
-Moderator
+- Node.js (v14 or higher)
+- MongoDB
+- Google Gemini API key
+- Mailtrap account (for email testing)
 
-Admin
+## ⚙️ Installation
 
-Moderator skill management
+1. **Clone the repository**
 
-Secure JWT authentication
+   ```bash
+   git clone <repository-url>
+   cd ai-ticket-assistant
+   ```
 
-⚙️ Background Processing
+2. **Install dependencies**
 
-Event-driven architecture using Inngest
+   ```bash
+   npm install
+   ```
 
-Asynchronous ticket processing
+3. **Environment Setup**
+   Create a `.env` file in the root directory with the following variables:
 
-Automated email notifications
+   ```env
+   # MongoDB
+   MONGO_URI=your_mongodb_uri
 
-🛠️ Tech Stack
-Technology	Usage
-Node.js	Backend runtime
-Express.js	API framework
-MongoDB	Database
-JWT	Authentication
-Inngest	Background job processing
-Google Gemini API	AI ticket analysis
-Nodemailer	Email notifications
-Mailtrap	Email testing
-Nodemon	Development auto-reload
-📋 Prerequisites
+   # JWT
+   JWT_SECRET=your_jwt_secret
 
-Make sure you have the following installed:
+   # Email (Mailtrap)
+   MAILTRAP_SMTP_HOST=your_mailtrap_host
+   MAILTRAP_SMTP_PORT=your_mailtrap_port
+   MAILTRAP_SMTP_USER=your_mailtrap_user
+   MAILTRAP_SMTP_PASS=your_mailtrap_password
 
-Node.js (v14+)
+   # AI (Gemini)
+   GEMINI_API_KEY=your_gemini_api_key
 
-MongoDB
+   # Application
+   APP_URL=http://localhost:3000
+   ```
 
-Google Gemini API Key
+## 🚀 Running the Application
 
-Mailtrap Account
+1. **Start the main server**
 
-⚙️ Installation
-1️⃣ Clone the repository
-git clone <repository-url>
-cd ai-ticket-assistant
-2️⃣ Install dependencies
-npm install
-3️⃣ Environment setup
+   ```bash
+   npm run dev
+   ```
 
-Create a .env file in the root directory.
+2. **Start the Inngest dev server**
+   ```bash
+   npm run inngest-dev
+   ```
 
-# MongoDB
-MONGO_URI=your_mongodb_uri
+## 📝 API Endpoints
 
-# JWT
-JWT_SECRET=your_jwt_secret
+### Authentication
 
-# Email (Mailtrap)
-MAILTRAP_SMTP_HOST=your_mailtrap_host
-MAILTRAP_SMTP_PORT=your_mailtrap_port
-MAILTRAP_SMTP_USER=your_mailtrap_user
-MAILTRAP_SMTP_PASS=your_mailtrap_password
+- `POST /api/auth/signup` - Register a new user
+- `POST /api/auth/login` - Login and get JWT token
 
-# AI (Gemini)
-GEMINI_API_KEY=your_gemini_api_key
+### Tickets
 
-# Application
-APP_URL=http://localhost:3000
-▶️ Running the Application
-Start the backend server
-npm run dev
-Start the Inngest dev server
-npm run inngest-dev
+- `POST /api/tickets` - Create a new ticket
+- `GET /api/tickets` - Get all tickets for logged-in user
+- `GET /api/tickets/:id` - Get ticket details
 
-Inngest dashboard will run on:
+### Admin
 
-http://localhost:8288
-📝 API Endpoints
-🔐 Authentication
-Method	Endpoint	Description
-POST	/api/auth/signup	Register new user
-POST	/api/auth/login	Login and receive JWT
-🎫 Tickets
-Method	Endpoint	Description
-POST	/api/tickets	Create new ticket
-GET	/api/tickets	Get all user tickets
-GET	/api/tickets/:id	Get ticket details
-🛠️ Admin
-Method	Endpoint	Description
-GET	/api/auth/users	Get all users
-POST	/api/auth/update-user	Update role & skills
-🔄 Ticket Processing Flow
-1️⃣ Ticket Creation
+- `GET /api/auth/users` - Get all users (Admin only)
+- `POST /api/auth/update-user` - Update user role & skills (Admin only)
 
-User submits a ticket with title and description.
+## 🔄 Ticket Processing Flow
 
-2️⃣ AI Processing
+1. **Ticket Creation**
 
-Inngest triggers an event:
+   - User submits a ticket with title and description
+   - System creates initial ticket record
 
-on-ticket-created
+2. **AI Processing**
 
-Gemini AI analyzes the ticket and generates:
+   - Inngest triggers `on-ticket-created` event
+   - AI analyzes ticket content
+   - Generates:
+     - Required skills
+     - Priority level
+     - Helpful notes
+     - Ticket type
 
-Ticket category
+3. **Moderator Assignment**
 
-Priority level
+   - System searches for moderators with matching skills
+   - Uses regex-based skill matching
+   - Falls back to admin if no match found
+   - Updates ticket with assignment
 
-Required skills
+4. **Notification**
+   - Sends email to assigned moderator
+   - Includes ticket details and AI-generated notes
 
-Helpful moderator notes
+## 🧪 Testing
 
-3️⃣ Moderator Assignment
+1. **Start the Inngest dev server**
 
-The system:
+   ```bash
+   npm run inngest-dev
+   ```
 
-Searches moderators with matching skills
+   This will start the Inngest development server at http://localhost:8288
 
-Assigns the best matching moderator
+2. **Test Ticket Creation**
+   ```bash
+   curl -X POST http://localhost:3000/api/tickets \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+   -d '{
+     "title": "Database Connection Issue",
+     "description": "Experiencing intermittent database connection timeouts"
+   }'
+   ```
 
-Falls back to admin assignment if none found
+## 🔍 Troubleshooting
 
-4️⃣ Notification
+### Common Issues
 
-An email is sent to the assigned moderator containing:
+1. **Port Conflicts**
+   If you see "address already in use" error:
 
-Ticket details
+   ```bash
+   # Find process using port 8288
+   lsof -i :8288
+   # Kill the process
+   kill -9 <PID>
+   ```
 
-AI-generated notes
+2. **AI Processing Errors**
 
-Priority level
+   - Verify GEMINI_API_KEY in .env
+   - Check API quota and limits
+   - Validate request format
 
-🧪 Testing Ticket Creation
+3. **Email Issues**
+   - Verify Mailtrap credentials
+   - Check SMTP settings
+   - Monitor email delivery logs
 
-Use this CURL command:
+## 📚 Dependencies
 
-curl -X POST http://localhost:3000/api/tickets \
--H "Content-Type: application/json" \
--H "Authorization: Bearer YOUR_JWT_TOKEN" \
--d '{
-"title": "Database Connection Issue",
-"description": "Experiencing intermittent database connection timeouts"
-}'
-🔍 Troubleshooting
-Port conflict
-lsof -i :8288
-kill -9 <PID>
-AI Errors
+- `@inngest/agent-kit`: ^0.7.3
+- `bcrypt`: ^5.1.1
+- `cors`: ^2.8.5
+- `dotenv`: ^16.5.0
+- `express`: ^5.1.0
+- `inngest`: ^3.35.0
+- `jsonwebtoken`: ^9.0.2
+- `mongoose`: ^8.13.2
+- `nodemailer`: ^6.10.1
 
-Check:
+## 🤝 Contributing
 
-GEMINI_API_KEY
+we don't accept contributions for this project, as this is a part of a video and code files needs to given as it is.
 
-API limits
+## 🙏 Acknowledgments
 
-Request format
-
-Email Issues
-
-Verify:
-
-Mailtrap credentials
-
-SMTP configuration
-
-Email logs
-
-📦 Dependencies
-@inngest/agent-kit
-bcrypt
-cors
-dotenv
-express
-inngest
-jsonwebtoken
-mongoose
-nodemailer
-🙏 Acknowledgements
-
-Inngest — Background job processing
-
-Google Gemini — AI-powered ticket analysis
-
-Mailtrap — Email testing
-
-MongoDB — Database
+- Inngest for background job processing
+- Google Gemini for AI capabilities
+- Mailtrap for email testing
+- MongoDB for database
