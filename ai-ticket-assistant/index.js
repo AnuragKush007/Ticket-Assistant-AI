@@ -27,7 +27,9 @@ app.use(
     functions: [onUserSignup, onTicketCreated],
   })
 );
-
+app.get("/", (req, res) => {
+  res.send("AI Ticket Assistant API is running 🚀");
+});
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
